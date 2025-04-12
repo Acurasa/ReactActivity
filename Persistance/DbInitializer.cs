@@ -5,12 +5,9 @@ namespace Persistance;
 
 public class DbInitializer
 {
-    public static async Task SeedData(DbContext dbContext)
+    public static async Task SeedData(AppDbContext dbContext)
     {
-        if(dbContext is not AppDbContext) return;
-        var appDbContext = (AppDbContext)dbContext;
-        if (appDbContext.Activities.Any()) return;
-        
+        if (dbContext.Activities.Any()) return;
         List<Activity> activities = new()
         {
             new()
@@ -128,8 +125,9 @@ public class DbInitializer
                 Longitude = -0.781404
             }
         };
-
-        await dbContext.AddRangeAsync(activities);
+        dbContext.ChangeTracker.Clear();
+        await dbContext.Activities.AddRangeAsync(activities);
+        await dbContext.SaveChangesAsync();
     }
 
 }

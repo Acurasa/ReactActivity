@@ -31,14 +31,20 @@ var serviceProvider = scope.ServiceProvider;
 try
 {
     var dbContext = serviceProvider.GetService<AppDbContext>();
+    var logger = serviceProvider.GetService<ILogger<Program>>();
+    
+    logger.LogInformation("Applying migrations..."); 
     await dbContext.Database.MigrateAsync();
+    
+    logger.LogInformation("Seeding data...");
     await DbInitializer.SeedData(dbContext);
     
+    logger.LogInformation("Data seeded successfully.");
 }
 catch (Exception e)
 {
     var logger = serviceProvider.GetService<ILogger<Program>>();
-    logger.LogError(e,"Error while seeding data Occured");
+    logger.LogError(e, "Error while seeding data occurred");
     throw;
 }
 app.Run();
