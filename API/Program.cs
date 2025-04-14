@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>().RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetActivityList).Assembly));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
