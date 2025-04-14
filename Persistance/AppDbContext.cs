@@ -5,7 +5,7 @@ namespace Persistance;
 
 public class AppDbContext(DbContextOptions opt) : DbContext(opt)
 {
- public required DbSet<Activity> Activities { get; set; }
+ public required DbSet<Activity?> Activities { get; set; }
  
  protected override void OnModelCreating(ModelBuilder modelBuilder)
  {
