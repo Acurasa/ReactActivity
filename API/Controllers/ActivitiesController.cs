@@ -24,7 +24,7 @@ public class ActivitiesController(AppDbContext dbContext) : BaseController
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> CreateActivity(Activity activity)
+    public async Task<ActionResult<string>> CreateActivity([FromBody] Activity activity)
     {
         var created = await Mediator.Send(new CreateActivityCommand.Command {Activity = activity});
 
@@ -38,5 +38,14 @@ public class ActivitiesController(AppDbContext dbContext) : BaseController
         await Mediator.Send((new UpdateActivityCommand.Command() { Activity = activity }));
 
         return NoContent();
+    }
+
+    [HttpDelete]
+
+    public async Task<IActionResult> DeleteActivity(string id)
+    {
+        await Mediator.Send(new DeleteActivityCommand.Command() { Id = id });
+
+        return Ok();
     }
 }

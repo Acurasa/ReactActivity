@@ -1,4 +1,5 @@
 using Application.Activities.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistance;
 
@@ -7,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Logging.AddConsole();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -23,7 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader()
-    .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+    .AllowAnyOrigin());//WithOrigins("http://localhost:3000", "https://localhost:3000"));
 
 app.UseHttpsRedirection();
 
