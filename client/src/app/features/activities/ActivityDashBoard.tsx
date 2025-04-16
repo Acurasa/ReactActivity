@@ -1,21 +1,52 @@
-import { Grid, List, ListItem, ListItemText } from '@mui/material'
-import React from 'react'
-import ActivityList from './ActivityList'
-import AcitivityDetails from './ActivityDetails'
+import { Grid } from "@mui/material";
+import ActivityList from "./ActivityList";
+import ActivityDetail from "./ActivityDetails";
+import ActivityForm from "./ActivityForm";
 
 type Props = {
     activities: Activity[]
+    selectActivity: (id: string) => void;
+    cancelSelectActivity: () => void;
+    selectedActivity?: Activity;
+    openForm: (id: string) => void;
+    closeForm: () => void;
+    editMode: boolean
+    submitForm: (activity: Activity) => void
+    deleteActivity: (id: string) => void
 }
 
-
-export default function ActivityDashBoard({activities}: Props) {
+export default function ActivityDashboard({ activities, cancelSelectActivity, 
+    selectActivity,
+    selectedActivity,
+    openForm,
+    closeForm,
+    editMode,
+    submitForm,
+    deleteActivity
+}: Props) {
     return (
-        <Grid container mt={12} spacing={3}>
+        <Grid container spacing={3}>
             <Grid size={7}>
-                <ActivityList activities={activities}></ActivityList>
+                <ActivityList
+                    activities={activities}
+                    selectActivity={selectActivity}
+                    deleteActivity={deleteActivity}
+                />
             </Grid>
             <Grid size={5}>
-                {activities [0] && <AcitivityDetails activity={activities[0]} />}
+                {selectedActivity && !editMode &&
+                    <ActivityDetail
+                        activity={selectedActivity}
+                        cancelSelectActivity={cancelSelectActivity}
+                        openForm={openForm}
+                    />
+                }
+                {editMode &&
+                <ActivityForm 
+                    closeForm={closeForm} 
+                    activity={selectedActivity} 
+                    submitForm={submitForm}
+                />}
             </Grid>
         </Grid>
     )
